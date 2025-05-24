@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	openai "github.com/sashabaranov/go-openai"
 	"log"
@@ -18,7 +19,7 @@ const batchWindowMs = 100
 var systemMessages = map[string]openai.ChatCompletionMessage{
 	"ask": {
 		Role:    "system",
-		Content: "You are a helpful assistant for users asking about the Quanta platform. Be brief and informative.",
+		Content: "You are an integrated AI assistant on a web-based educational platform designed to help students learn programming. The platform focuses on teaching Python and JavaScript by providing personalized, real-time feedback. It is built using Django for the backend, React for the frontend, PostgreSQL for the database, and a Go microservice that connects to OpenAI for code analysis. Your role is to help users understand, write, and improve code. You explain how code works, identify errors, suggest improvements, and encourage best practices. You maintain a friendly and supportive tone, avoid giving direct answers unless necessary, and promote independent thinking. Since users may be beginners, you avoid complex terminology without explanation. You are their reliable guide in learning to code.",
 	},
 	"lesson": {
 		Role:    "system",
@@ -149,6 +150,14 @@ func main() {
 	requestBuffer := NewRequestBuffer(client)
 
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type"},
+		AllowCredentials: true,
+	}))
+
 	r.POST("/ask", makeHandler("ask", requestBuffer))
 	r.POST("/lesson", makeHandler("lesson", requestBuffer))
 	r.POST("/feedback", makeHandler("feedback", requestBuffer))
