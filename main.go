@@ -13,7 +13,7 @@ import (
 
 var API_KEY = os.Getenv("OPENAI_API_KEY")
 
-const batchWindowMs = 100 // Время ожидания перед обработкой пакета (мс)
+const batchWindowMs = 100
 
 var systemMessages = map[string]openai.ChatCompletionMessage{
 	"ask": {
@@ -31,7 +31,8 @@ var systemMessages = map[string]openai.ChatCompletionMessage{
 }
 
 type QueryRequest struct {
-	Parameter string `json:"parameter"` // То, что приходит от пользователя в JSON
+	Parameter string `json:"parameter"`
+	Language  string `json:"language"`
 }
 
 type bufferedRequest struct {
