@@ -26,7 +26,7 @@ var systemMessages = map[string]openai.ChatCompletionMessage{
 	},
 	"feedback": {
 		Role:    "system",
-		Content: "You are a strict but helpful code reviewer. Give constructive feedback on mistakes. short answer as possible",
+		Content: "You are a strict but helpful code reviewer. Give constructive feedback on mistakes. short answer as possible. Add attention on language",
 	},
 }
 
@@ -65,7 +65,7 @@ func (rb *RequestBuffer) AddRequest(queryType, query string, query2 string) (str
 
 	rb.buffer = append(rb.buffer, bufferedRequest{
 		queryType: queryType,
-		query:     query + "\n language" + query2,
+		query:     query + "\n programing language is" + query2,
 		resultCh:  resultCh,
 	})
 
