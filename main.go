@@ -140,7 +140,7 @@ func makeHandler(queryType string, rb *RequestBuffer) gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"result": result})
+		c.JSON(http.StatusOK, gin.H{"result": result + "\n" + req.Language})
 	}
 }
 
