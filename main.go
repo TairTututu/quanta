@@ -26,7 +26,7 @@ var systemMessages = map[string]openai.ChatCompletionMessage{
 	},
 	"feedback": {
 		Role:    "system",
-		Content: "You are a strict but helpful code reviewer. Give constructive feedback on mistakes.",
+		Content: "You are a strict but helpful code reviewer. Give constructive feedback on mistakes. short answer as possible",
 	},
 }
 
@@ -58,14 +58,14 @@ func NewRequestBuffer(client *openai.Client) *RequestBuffer {
 	}
 }
 
-func (rb *RequestBuffer) AddRequest(queryType, query string) (string, error) {
+func (rb *RequestBuffer) AddRequest(queryType, query string, query2 string) (string, error) {
 	rb.mu.Lock()
 	currentTime := time.Now()
 	resultCh := make(chan string, 1)
 
 	rb.buffer = append(rb.buffer, bufferedRequest{
 		queryType: queryType,
-		query:     query,
+		query:     query + "\n language" + query2,
 		resultCh:  resultCh,
 	})
 
@@ -134,7 +134,7 @@ func makeHandler(queryType string, rb *RequestBuffer) gin.HandlerFunc {
 			return
 		}
 
-		result, err := rb.AddRequest(queryType, req.Parameter)
+		result, err := rb.AddRequest(queryType, req.Parameter, req.Language)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
