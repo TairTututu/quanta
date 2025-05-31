@@ -1,4 +1,4 @@
-FROM golang:1.21
+FROM golang:1.23.7
 
 RUN apt-get update && \
     apt-get install -y python3 nodejs
