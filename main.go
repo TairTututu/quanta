@@ -27,7 +27,7 @@ var systemMessages = map[string]openai.ChatCompletionMessage{
 	},
 	"feedback": {
 		Role:    "system",
-		Content: "You are a strict but helpful code reviewer. Give constructive feedback on mistakes. short answer as possible. Add attention on language",
+		Content: "You are a strict but helpful code reviewer. Give constructive feedback on mistakes. short answer as possible. Add attention on language. Send JSON feedback for text part and code for code part",
 	},
 	"test": {
 		Role: "system",
