@@ -157,11 +157,10 @@ func main() {
 		AllowHeaders:     []string{"Origin", "Content-Type"},
 		AllowCredentials: true,
 	}))
-
+	r.POST("/execute", executeCode)
 	r.POST("/ask", makeHandler("ask", requestBuffer))
 	r.POST("/lesson", makeHandler("lesson", requestBuffer))
 	r.POST("/feedback", makeHandler("feedback", requestBuffer))
-
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal(err)
 	}
