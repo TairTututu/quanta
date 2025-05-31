@@ -29,11 +29,16 @@ var systemMessages = map[string]openai.ChatCompletionMessage{
 		Role:    "system",
 		Content: "You are a strict but helpful code reviewer. Give constructive feedback on mistakes. short answer as possible. Add attention on language",
 	},
+	"test": {
+		Role:    "system",
+		Content: "Give short explain on right answer. Less words. short answer as possible. Add attention on language and mistakes. Right answer marks as .RA) and chosen by student as .SC)",
+	},
 }
 
 type QueryRequest struct {
 	Parameter string `json:"parameter"`
 	Language  string `json:"language"`
+	Mode      string `json:"mode"`
 }
 
 type bufferedRequest struct {
@@ -59,14 +64,14 @@ func NewRequestBuffer(client *openai.Client) *RequestBuffer {
 	}
 }
 
-func (rb *RequestBuffer) AddRequest(queryType, query string, query2 string) (string, error) {
+func (rb *RequestBuffer) AddRequest(queryType, query string, query2 string, taskType string) (string, error) {
 	rb.mu.Lock()
 	currentTime := time.Now()
 	resultCh := make(chan string, 1)
 
 	rb.buffer = append(rb.buffer, bufferedRequest{
 		queryType: queryType,
-		query:     query + "\n programing language is" + query2,
+		query:     taskType + "is" + query + "\n Answer is: \n" + query2,
 		resultCh:  resultCh,
 	})
 
@@ -135,7 +140,7 @@ func makeHandler(queryType string, rb *RequestBuffer) gin.HandlerFunc {
 			return
 		}
 
-		result, err := rb.AddRequest(queryType, req.Parameter, req.Language)
+		result, err := rb.AddRequest(queryType, req.Parameter, req.Language, req.Mode)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
