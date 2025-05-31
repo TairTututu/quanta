@@ -30,15 +30,20 @@ var systemMessages = map[string]openai.ChatCompletionMessage{
 		Content: "You are a strict but helpful code reviewer. Give constructive feedback on mistakes. short answer as possible. Add attention on language",
 	},
 	"test": {
-		Role:    "system",
-		Content: "Give short explain on right answer. Less words. short answer as possible. Add attention on language and mistakes. Right answer marks as .RA) and chosen by student as .SC)",
+		Role: "system",
+		Content: `You evaluate multiple-choice programming questions. Each option starts with a letter (a), b), etc.) and may include markers: .RA) = correct answer, .SC) = chosen by student. Do not show these markers in your answer. Instead, output:
+
+		1. The correct answer in clean format.
+		2. A very short explanation if the student's choice is wrong.
+
+		Focus on syntax or language issues. Be brief and clear.`,
 	},
 }
 
 type QueryRequest struct {
-	Parameter string `json:"parameter"`
-	Language  string `json:"language"`
-	Mode      string `json:"mode"`
+	Input    string `json:"input"`
+	Question string `json:"question"`
+	Language string `json:"language"`
 }
 
 type bufferedRequest struct {
@@ -64,14 +69,14 @@ func NewRequestBuffer(client *openai.Client) *RequestBuffer {
 	}
 }
 
-func (rb *RequestBuffer) AddRequest(queryType, query string, query2 string, taskType string) (string, error) {
+func (rb *RequestBuffer) AddRequest(queryType, question string, query string, language string) (string, error) {
 	rb.mu.Lock()
 	currentTime := time.Now()
 	resultCh := make(chan string, 1)
 
 	rb.buffer = append(rb.buffer, bufferedRequest{
 		queryType: queryType,
-		query:     taskType + "is" + query + "\n Answer is: \n" + query2,
+		query:     "Task is" + question + "Language is" + language + "\n Answer is: \n" + query,
 		resultCh:  resultCh,
 	})
 
@@ -140,13 +145,13 @@ func makeHandler(queryType string, rb *RequestBuffer) gin.HandlerFunc {
 			return
 		}
 
-		result, err := rb.AddRequest(queryType, req.Parameter, req.Language, req.Mode)
+		result, err := rb.AddRequest(queryType, req.Question, req.Input, req.Language)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"result": result + "\n" + req.Language})
+		c.JSON(http.StatusOK, gin.H{"result": result + "\n"})
 	}
 }
 
