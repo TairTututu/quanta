@@ -166,6 +166,7 @@ func main() {
 	r.POST("/ask", makeHandler("ask", requestBuffer))
 	r.POST("/lesson", makeHandler("lesson", requestBuffer))
 	r.POST("/feedback", makeHandler("feedback", requestBuffer))
+	r.POST("/test", makeHandler("test", requestBuffer))
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal(err)
 	}
