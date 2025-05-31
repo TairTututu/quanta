@@ -74,11 +74,19 @@ func (rb *RequestBuffer) AddRequest(queryType, question string, query string, la
 	currentTime := time.Now()
 	resultCh := make(chan string, 1)
 
-	rb.buffer = append(rb.buffer, bufferedRequest{
-		queryType: queryType,
-		query:     "Task is" + question + "Language is" + language + "\n Answer is: \n" + query,
-		resultCh:  resultCh,
-	})
+	if len(query) == 0 {
+		rb.buffer = append(rb.buffer, bufferedRequest{
+			queryType: queryType,
+			query:     question,
+			resultCh:  resultCh,
+		})
+	} else {
+		rb.buffer = append(rb.buffer, bufferedRequest{
+			queryType: queryType,
+			query:     "Task is" + question + "Language is" + language + "\n Answer is: \n" + query,
+			resultCh:  resultCh,
+		})
+	}
 
 	if currentTime.Sub(rb.lastRequestAt) > rb.batchWindow && !rb.processing {
 		rb.processing = true
