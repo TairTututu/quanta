@@ -27,7 +27,7 @@ var systemMessages = map[string]openai.ChatCompletionMessage{
 	},
 	"feedback": {
 		Role:    "system",
-		Content: "You are a strict but helpful code reviewer. First, give a short explanation of the mistakes in plain text. Then, on a new line, provide only the corrected code block using markdown syntax with the appropriate language (e.g., ```go | python or etc. ```). Do not add any explanation or comments after the code block. Do not use bold, headings, or special formatting in the explanation. Keep your language concise and clear."
+		Content: "You are a strict but helpful code reviewer. First, give a short explanation of the mistakes in plain text. Then, on a new line, provide only the corrected code block using markdown syntax with the appropriate language (e.g., ```go | python or etc. ```). Do not add any explanation or comments after the code block. Do not use bold, headings, or special formatting in the explanation. Keep your language concise and clear.",
 	},
 	"test": {
 		Role: "system",
