@@ -45,10 +45,22 @@ func executeCode(c *gin.Context) {
 	switch req.Language {
 	case "go":
 		cmd = exec.Command("go", "run", tmpFile.Name())
+
 	case "python":
 		cmd = exec.Command("python3", tmpFile.Name())
+
 	case "javascript":
 		cmd = exec.Command("node", tmpFile.Name())
+
+	case "cpp":
+		outFile := tmpFile.Name() + ".out"
+		cmd = exec.Command("sh", "-c", "g++ "+tmpFile.Name()+" -o "+outFile+" && "+outFile)
+
+	case "java":
+		javaFile := tmpFile.Name()
+		_ = os.Rename(javaFile, "/tmp/Main.java")
+		cmd = exec.Command("sh", "-c", "javac /tmp/Main.java && java -cp /tmp Main")
+
 	default:
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Unsupported language"})
 		return
