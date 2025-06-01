@@ -178,8 +178,8 @@ func main() {
 	r.POST("/execute", executeCode)
 	r.POST("/ask", makeHandler("ask", requestBuffer))
 	r.POST("/lesson", makeHandler("lesson", requestBuffer))
-	r.POST("/feedback", makeHandler("feedback", requestBuffer))
 	r.POST("/test", makeHandler("test", requestBuffer))
+	r.POST("/feedback", feedbackHandler(requestBuffer))
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal(err)
 	}
