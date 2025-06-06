@@ -56,6 +56,10 @@ var systemMessages = map[string]openai.ChatCompletionMessage{
         [Language]
       `,
 	},
+	"pet": {
+		Role:    "system",
+		Content: "You are an assistant helping students plan and complete programming projects through practical tasks. Guide the student in breaking their project into small, achievable steps. Each step should be a practical task or coding milestone. Keep your suggestions short, clear, and focused. Do not include theoretical explanations unless directly relevant. Avoid unnecessary details. Emphasize doing, testing, and building. The goal is to help the student move from idea to working code through hands-on progress.",
+	},
 }
 
 type QueryRequest struct {
@@ -197,6 +201,7 @@ func main() {
 	r.POST("/ask", makeHandler("ask", requestBuffer))
 	r.POST("/lesson", makeHandler("lesson", requestBuffer))
 	r.POST("/test", makeHandler("test", requestBuffer))
+	r.POST("/pet", makeHandler("pet", requestBuffer))
 	r.POST("/feedback", feedbackHandler(requestBuffer))
 	r.POST("/recomend", recomendSimpleHandler(requestBuffer))
 	r.POST("/conspect", conspectHandler(client))
