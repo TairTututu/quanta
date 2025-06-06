@@ -62,7 +62,7 @@ func recomendSimpleHandler(rb *RequestBuffer) gin.HandlerFunc {
 		filtered := make(map[string][]map[string]any)
 		for _, lang := range langs {
 			for _, course := range allCourses {
-				if courseLang, ok := course["language"].(string); ok && strings.EqualFold(courseLang, lang) {
+				if title, ok := course["title"].(string); ok && strings.Contains(strings.ToLower(title), strings.ToLower(lang)) {
 					filtered[lang] = append(filtered[lang], map[string]any{
 						"id":       course["id"],
 						"language": course["language"],
