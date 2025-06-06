@@ -68,6 +68,7 @@ func recomendSimpleHandler(rb *RequestBuffer) gin.HandlerFunc {
 						"language": course["language"],
 					})
 				}
+
 			}
 			if _, found := filtered[lang]; !found {
 				filtered[lang] = nil
