@@ -59,12 +59,15 @@ func recomendSimpleHandler(rb *RequestBuffer) gin.HandlerFunc {
 			return
 		}
 
-		// Фильтрация курсов по языкам
 		filtered := make(map[string][]map[string]any)
 		for _, lang := range langs {
 			for _, course := range allCourses {
-				if title, ok := course["title"].(string); ok && strings.Contains(strings.ToLower(title), strings.ToLower(lang)) {
-					filtered[lang] = append(filtered[lang], course)
+				if courseLang, ok := course["language"].(string); ok && strings.EqualFold(courseLang, lang) {
+					filtered[lang] = append(filtered[lang], map[string]any{
+						"id":       course["id"],
+						"language": course["language"],
+					})
+
 				}
 			}
 			if _, found := filtered[lang]; !found {

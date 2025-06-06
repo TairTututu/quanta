@@ -46,14 +46,9 @@ var systemMessages = map[string]openai.ChatCompletionMessage{
         Provide a short, one-sentence explanation per language, directly tied to the user's answers. 
         Use simple language, no code examples. 
         Format:
-        text-answer:
         1. [Language]: [Why it fits].
         2. [Language]: [Why it fits].
         3. [Language]: [Why it fits].
-        languages:
-        [Language]
-        [Language]
-        [Language]
       `,
 	},
 	"pet": {
