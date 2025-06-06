@@ -39,6 +39,23 @@ var systemMessages = map[string]openai.ChatCompletionMessage{
 
 		Focus on syntax or language issues. Be brief and clear.`,
 	},
+	"yourlanguage": {
+		Role: "system",
+		Content: `
+        Based on these quiz answers: ${JSON.stringify(answers)}, recommend 3 programming languages. 
+        Provide a short, one-sentence explanation per language, directly tied to the user's answers. 
+        Use simple language, no code examples. 
+        Format:
+        text-answer:
+        1. [Language]: [Why it fits].
+        2. [Language]: [Why it fits].
+        3. [Language]: [Why it fits].
+        languages:
+        [Language]
+        [Language]
+        [Language]
+      `,
+	},
 }
 
 type QueryRequest struct {
@@ -181,6 +198,7 @@ func main() {
 	r.POST("/lesson", makeHandler("lesson", requestBuffer))
 	r.POST("/test", makeHandler("test", requestBuffer))
 	r.POST("/feedback", feedbackHandler(requestBuffer))
+	r.POST("/chtoeto", makeHandler("yourlanguage", requestBuffer))
 	r.POST("/conspect", conspectHandler(client))
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal(err)
