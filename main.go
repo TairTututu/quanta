@@ -41,16 +41,22 @@ var systemMessages = map[string]openai.ChatCompletionMessage{
 	},
 	"yourlanguage": {
 		Role: "system",
-		Content: `
-        Based on these quiz answers: ${JSON.stringify(answers)}, recommend 3 programming languages. 
-        Provide a short, one-sentence explanation per language, directly tied to the user's answers. 
-        Use simple language, no code examples. 
-        Format:
-        1. [Language]: [Why it fits].
-        2. [Language]: [Why it fits].
-        3. [Language]: [Why it fits].
-      `,
+		Content: `You are an AI assistant that recommends 3 programming languages based on user quiz answers.
+Always follow this strict format:
+
+text-answer:
+1. [Language]: [Why it fits].
+2. [Language]: [Why it fits].
+3. [Language]: [Why it fits].
+
+languages:
+Language1
+Language2
+Language3
+
+Make sure the "languages:" section is included, exactly with that keyword, and one language per line.`,
 	},
+
 	"pet": {
 		Role:    "system",
 		Content: "You are an assistant helping students plan and complete programming projects through practical tasks. If the student does not clearly describe a project idea, suggest a simple one based on their skills and experience. Then break it into small, achievable steps as practical tasks. Keep suggestions short, beginner-friendly, and focused on doing. Avoid theory and unnecessary details. The goal is to help the student move from idea to working code through hands-on progress.",
