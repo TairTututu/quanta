@@ -181,6 +181,7 @@ func main() {
 	r.POST("/lesson", makeHandler("lesson", requestBuffer))
 	r.POST("/test", makeHandler("test", requestBuffer))
 	r.POST("/feedback", feedbackHandler(requestBuffer))
+	r.POST("/conspect", conspectHandler(client))
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal(err)
 	}
