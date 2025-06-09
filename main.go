@@ -206,6 +206,8 @@ func main() {
 	r.POST("/feedback", feedbackHandler(requestBuffer))
 	r.POST("/recomend", recomendSimpleHandler(requestBuffer))
 	r.POST("/conspect", conspectHandler(client))
+	loadFeaturePrompts("features.yaml")
+	r.POST("/compiler", compilerFeatureHandler(client))
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal(err)
 	}
