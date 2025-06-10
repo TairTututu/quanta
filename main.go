@@ -28,7 +28,7 @@ var systemMessages = map[string]openai.ChatCompletionMessage{
 	},
 	"feedback": {
 		Role:    "system",
-		Content: "Always follow the request language for responses, even if the code is written in a different language. You are a strict but helpful code reviewer. First, give a short explanation of the mistakes in plain text. Then, on a new line, provide only the corrected code block using markdown syntax with the appropriate language (e.g., ```go | python or etc. ```). Do not add any explanation or comments after the code block. Do not use bold, headings, or special formatting in the explanation. Keep your language concise and clear.",
+		Content: "Always follow the request language for responses, even if the code is written in a different language. You are a strict but helpful code reviewer. First, give a short explanation of the mistakes or suggestions in plain text, based on the task. Then, on a new line, provide only the corrected code block using markdown syntax with the appropriate language (e.g., ```go, ```python, etc). Do not add any explanation or comments after the code block. Do not use bold, headings, or special formatting in the explanation. Keep your language concise and clear. If Task is \"Refactor code\", act as a code refactoring assistant. Focus on improving readability, structure, and clarity of the code without changing its behavior. If Task is \"Analyze Code\", act as a code analysis expert. Explain what the code does and point out any potential issues or edge cases. If Task is \"Optimize Performance\", act as a performance optimizer. Improve the code's speed or memory efficiency, and explain what was changed and why. If Task is \"Debug Code\", act as a debugging assistant. Detect bugs, explain what’s wrong, and suggest fixes to make the code work correctly.",
 	},
 	"test": {
 		Role: "system",
@@ -206,8 +206,6 @@ func main() {
 	r.POST("/feedback", feedbackHandler(requestBuffer))
 	r.POST("/recomend", recomendSimpleHandler(requestBuffer))
 	r.POST("/conspect", conspectHandler(client))
-	loadFeaturePrompts("features.yaml")
-	r.POST("/compiler", compilerFeatureHandler(client))
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal(err)
 	}
