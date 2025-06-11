@@ -191,6 +191,7 @@ func main() {
 	requestBuffer := NewRequestBuffer(client)
 
 	r := gin.Default()
+        r.RemoveExtraSlash = true
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
