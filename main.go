@@ -191,14 +191,19 @@ func main() {
 	requestBuffer := NewRequestBuffer(client)
 
 	r := gin.Default()
-        r.RemoveExtraSlash = true
+        
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type"},
-		AllowCredentials: true,
-	}))
+	AllowOriginFunc: func(origin string) bool {
+	
+		return true
+	},
+	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+	ExposeHeaders:    []string{"Content-Length"},
+	AllowCredentials: true,
+	MaxAge:           12 * time.Hour,
+}))
 	r.POST("/execute", executeCode)
 	r.POST("/ask", makeHandler("ask", requestBuffer))
 	r.POST("/lesson", makeHandler("lesson", requestBuffer))
